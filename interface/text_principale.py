@@ -6,7 +6,7 @@ class TextPrincipale(Frame):
         self.boss=boss
         Frame.__init__(self,master=boss)
 
-        self.text=Text(self,width=50,height=40,bg='white')
+        self.text=Text(self,width=50,height=37,bg='white')
         self.text.grid(row=0,column=0)
 
         self.scrollbary=Scrollbar(self,command=self.text.yview)
