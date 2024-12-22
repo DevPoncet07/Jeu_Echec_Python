@@ -3,7 +3,7 @@
 def cherche_coups_possible(obj_plateau):
     coups_possible=[]
     plateau=obj_plateau.plateau
-    if obj_plateau.joueur_actif=="white":
+    if obj_plateau.joueur_actif.coul=="white":
         y=0
         for ligne in plateau:
             x=0

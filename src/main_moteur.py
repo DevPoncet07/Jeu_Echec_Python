@@ -1,29 +1,35 @@
+"""
+###############################################################################################
+#   Fichier d'entre du moteur d echec.
+#       class MoteurEchec(boss)  boss= MainInterface or MainConsole
+#
+#
+#
+#
+###############################################################################################
+"""
+
+
+
+
 from src.plateau import Plateau
 from src.fonction_cherche_coups_possible import cherche_coups_possible
 from src.fonction_joue_un_coup_plateau import joue_un_coup_plateau
+from src.objet_joueur import ObjetJoueur
 
 
-def print_console(plateau):
-    print("\n"+"*"*40)
-    print()
-    for ligne in plateau.plateau:
-        print(" ".join(ligne))
-    if plateau.joueur_actif=="white":
-        couleur_joueur="Blanc"
-    else:
-        couleur_joueur="Noir"
-    print("\ncoup aux : "+str(couleur_joueur))
-    print()
+
 
 
 class MoteurEchec:
     def __init__(self,boss):
         self.boss=boss
         self.version=1
-        self.joueur_blanc = ""
-        self.joueur_noir = ""
+        self.joueur_blanc = None
+        self.joueur_noir = None
         self.plateau = None
         self.coups_possible=[]
+        self.partie_fini=False
 
         self.PLATEAU_DE_BASE=[["r","n","b","q","k","b","n","r"],
                               ["p","p","p","p","p","p","p","p"],
@@ -33,23 +39,27 @@ class MoteurEchec:
                               [".",".",".",".",".",".",".","."],
                               ["P","P","P","P","P","P","P","P"],
                               ["R","N","B","Q","K","B","N","R"]]
-        self.start_new_game("joueur","joueur")
 
     def start_new_game(self,joueur_blanc,joueur_noir):
-        self.joueur_blanc=joueur_blanc
-        self.joueur_noir=joueur_noir
-        self.plateau = Plateau(self.PLATEAU_DE_BASE, "white")
+        self.joueur_blanc=ObjetJoueur(self,joueur_blanc,"white")
+        self.joueur_noir=ObjetJoueur(self,joueur_noir,"black")
+        self.plateau = Plateau(self.PLATEAU_DE_BASE, self.joueur_blanc)
         self.coups_possible=cherche_coups_possible(self.plateau)
 
     def joue_un_coup(self,coup):
         joue_un_coup_plateau(self.plateau,coup)
-        if self.plateau.joueur_actif=="white":
-            self.plateau.joueur_actif='black'
+        if self.plateau.joueur_actif.coul==self.joueur_blanc.coul:
+            self.plateau.joueur_actif=self.joueur_noir
         else:
-            self.plateau.joueur_actif="white"
+            self.plateau.joueur_actif=self.joueur_blanc
         self.coups_possible=cherche_coups_possible(self.plateau)
         if self.coups_possible==[]:
-            print("Ah ba plus de coup possible")
+            self.partie_fini=True
+        else:
+            if self.plateau.joueur_actif.coul == "white" and self.joueur_blanc.genre!="joueur":
+                self.plateau.joueur_actif.joue_un_coup(self.plateau,self.coups_possible)
+            elif self.plateau.joueur_actif.coul == "black" and self.joueur_noir.genre != "joueur":
+                self.plateau.joueur_actif.joue_un_coup(self.plateau, self.coups_possible)
 
     def teste_si_case_piece_dans_possibles(self,case):
         existe=False
@@ -72,4 +82,15 @@ class MoteurEchec:
                 existe=True
         return existe
 
+    def print_console(self,plateau):
+        print("\n" + "*" * 40)
+        print()
+        for ligne in plateau.plateau:
+            print(" ".join(ligne))
+        if plateau.joueur_actif.coul == "white":
+            couleur_joueur = "Blanc"
+        else:
+            couleur_joueur = "Noir"
+        print("\ncoup aux : " + str(couleur_joueur))
+        print()
 
