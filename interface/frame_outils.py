@@ -20,7 +20,7 @@ class FrameOutils(Frame):
         self.str_text_black = StringVar()
         self.combobox_black = ttk.Combobox(self, width=15, textvariable=self.str_text_black)
         self.combobox_black["values"] = ('joueur', 'aleatoire')
-        self.combobox_black.current(1)
+        self.combobox_black.current(0)
         self.combobox_black.grid(row=2, column=2,padx=10,pady=10)
 
 

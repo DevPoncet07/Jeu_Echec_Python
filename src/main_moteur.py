@@ -73,7 +73,7 @@ class MoteurEchec:
     def teste_si_coup_dans_possibles(self,coup):
         existe=False
         for coups in self.coups_possible:
-            if coups==coup:
+            if coups[:2]==coup:
                 existe=True
         return existe
 

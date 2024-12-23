@@ -4,6 +4,7 @@ from src.main_moteur import MoteurEchec
 from interface.canvas_principale import CanvasPrincipal
 from interface.toplevel_fin_partie import ToplevelFinPartie
 from interface.frame_outils import FrameOutils
+from interface.toplevel_promotion import ToplevelPromotion
 
 
 class MainInterface(Tk):
@@ -12,7 +13,7 @@ class MainInterface(Tk):
         self.geometry("+0+0")
         self.configure(background="grey30")
         self.chess=MoteurEchec(self)
-        self.chess.start_new_game("joueur", "aleatoire")
+        self.chess.start_new_game("joueur", "joueur")
 
         self.frame_info=Frame(self,bg='grey20')
         self.font_info=tkinter.font.Font(font="Arial",size=10,weight='bold')
@@ -31,6 +32,7 @@ class MainInterface(Tk):
         self.case_active =[-1,-1]
         self.case_possible_piece=[]
         self.fenetre_fin_partie=None
+        self.fenetre_promotion = None
 
         self.can.afficher_case_active(self.case_active, self.case_possible_piece)
         self.can.afficher_pieces(self.chess.plateau.plateau)
@@ -56,9 +58,9 @@ class MainInterface(Tk):
                 self.case_possible_piece=self.chess.renvoie_les_case_possible_pour_piece(self.case_active)
         elif self.chess.teste_si_coup_dans_possibles([self.case_active,coord_click]):
             self.joue_un_coup([self.case_active,coord_click])
+            self.text.print("coup jouer  : " + str(self.case_active)+" "+str(coord_click))
             self.case_active=[-2,-2]
             self.case_possible_piece=[]
-            self.text.print("coup jouer  : " + str(self.case_active)+" "+str(coord_click))
 
         else:
             self.case_active = [-2, -2]
@@ -67,27 +69,37 @@ class MainInterface(Tk):
         self.can.afficher_pieces(self.chess.plateau.plateau)
 
     def joue_un_coup(self,coup):
-        if coup!=[-1]:
-            if self.chess.plateau.joueur_actif.genre=="joueur":
-                self.chess.joue_un_coup(coup)
+        if self.chess.plateau.joueur_actif.genre == "joueur" and self.chess.plateau.plateau[coup[0][1]][coup[0][0]]=='P'and coup[1][1]==0:
+            self.fenetre_promotion = ToplevelPromotion(self, self.chess.plateau.joueur_actif.coul,coup)
+        elif self.chess.plateau.joueur_actif.genre == "joueur" and self.chess.plateau.plateau[coup[0][1]][coup[0][0]]=='p'and coup[1][1]==7:
+            self.fenetre_promotion = ToplevelPromotion(self, self.chess.plateau.joueur_actif.coul,coup)
+        else:
+            self.chess.joue_un_coup(coup)
+
+            self.can.afficher_case_active(self.case_active, self.case_possible_piece)
+            self.can.afficher_pieces(self.chess.plateau.plateau)
+            if self.chess.partie_fini:
+                self.fenetre_fin_partie = ToplevelFinPartie(self, "plus de coup", self.chess.plateau.joueur_actif.coul)
+            else:
+                if self.chess.plateau.joueur_actif.genre!="joueur":
+                    self.can.update()
+                    self.joue_un_coup(self.chess.plateau.joueur_actif.coup)
+                elif self.chess.partie_fini:
+                    self.fenetre_fin_partie = ToplevelFinPartie(self, "plus de coup", self.chess.plateau.joueur_actif.coul)
+
+    def sortie_fenetre_promotion(self,coup):
+        self.chess.joue_un_coup(coup)
+        self.fenetre_promotion.destroy()
         self.can.afficher_case_active(self.case_active, self.case_possible_piece)
         self.can.afficher_pieces(self.chess.plateau.plateau)
         if self.chess.partie_fini:
             self.fenetre_fin_partie = ToplevelFinPartie(self, "plus de coup", self.chess.plateau.joueur_actif.coul)
         else:
-            if self.chess.plateau.joueur_actif.coul == "white" and self.chess.joueur_blanc.genre!="joueur":
-                self.chess.joue_un_coup(self.chess.plateau.joueur_actif.coup)
+            if self.chess.plateau.joueur_actif != "joueur":
                 self.can.update()
-                #time.sleep(0.1)
-                self.joue_un_coup([-1])
-            elif self.chess.plateau.joueur_actif.coul == "black" and self.chess.joueur_noir.genre != "joueur":
-                self.chess.joue_un_coup(self.chess.plateau.joueur_actif.coup)
-                self.can.update()
-                #time.sleep(0.1)
-                self.joue_un_coup([-1])
+                self.joue_un_coup(self.chess.plateau.joueur_actif.coup)
             elif self.chess.partie_fini:
                 self.fenetre_fin_partie = ToplevelFinPartie(self, "plus de coup", self.chess.plateau.joueur_actif.coul)
-
 
 
 
