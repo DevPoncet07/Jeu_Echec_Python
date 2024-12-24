@@ -1,7 +1,6 @@
-from copy import deepcopy
+
 from src.fonction_joue_un_coup_plateau import joue_un_coup_plateau
-from src.objet_joueur import ObjetJoueur
-from src.plateau import Plateau
+from src.objet_plateau import ObjetPlateau
 """
 #################################################################################
 #   Function  very important                                                    #
@@ -13,7 +12,18 @@ from src.plateau import Plateau
 #                                                                               #
 #################################################################################
 """
-def cherche_coups_possible(obj_plateau,recursive=True):
+def cherche_coups_possible_adverse_plateau(obj_plateau):
+    if obj_plateau.joueur_actif.coul=="white":
+        obj_plateau.joueur_actif.coul = "black"
+        coups=cherche_coups_possible_plateau(obj_plateau,False)
+        obj_plateau.joueur_actif.coul = "white"
+    else:
+        obj_plateau.joueur_actif.coul = "white"
+        coups = cherche_coups_possible_plateau(obj_plateau, False)
+        obj_plateau.joueur_actif.coul = "black"
+    return coups
+
+def cherche_coups_possible_plateau(obj_plateau,recursive=True):
     coups_possible=[]
     plateau=obj_plateau.plateau
     y = 0
@@ -51,7 +61,7 @@ def cherche_coups_possible(obj_plateau,recursive=True):
                                 else:
                                     coups_possible.append([[x, y], [x-1, y - 1]])
                             # take en passant left
-                            if obj_plateau.pion_double_avance==[x-1,y-1]:
+                            if obj_plateau.pion_double_move==[x-1,y-1]:
                                 coups_possible.append([[x, y], [x - 1, y - 1]])
                         #secure pawn border right
                         if x<=6:
@@ -65,7 +75,7 @@ def cherche_coups_possible(obj_plateau,recursive=True):
                                 else:
                                     coups_possible.append([[x, y], [x+1, y - 1]])
                             #take pawn en passant
-                            if obj_plateau.pion_double_avance==[x+1,y-1]:
+                            if obj_plateau.pion_double_move==[x+1,y-1]:
                                 coups_possible.append([[x, y], [x + 1, y - 1]])
                 #if white rook
                 if case == 'R':
@@ -137,7 +147,7 @@ def cherche_coups_possible(obj_plateau,recursive=True):
                         if obj_plateau.roc_blanc[0] and obj_plateau.roc_blanc[1] and plateau[y][x-1]=="." and plateau[y][x-2]=="." and plateau[y][x-3]=="."  :
                             if obj_plateau.joueur_actif.coul=="white":
                                 obj_plateau.joueur_actif=obj_plateau.joueur_noir
-                                coup_temp=cherche_coups_possible(obj_plateau,False)
+                                coup_temp=cherche_coups_possible_plateau(obj_plateau,False)
                                 obj_plateau.joueur_actif = obj_plateau.joueur_blanc
                                 case_verif=True
                                 for elem in coup_temp:
@@ -150,9 +160,10 @@ def cherche_coups_possible(obj_plateau,recursive=True):
                                 if case_verif:
                                     coups_possible.append([[x, y], [x-2, y]])
                         if obj_plateau.roc_blanc[1] and obj_plateau.roc_blanc[2] and plateau[y][x+1]=="." and plateau[y][x+2]=="." :
+
                             if obj_plateau.joueur_actif.coul == "white":
                                 obj_plateau.joueur_actif = obj_plateau.joueur_noir
-                                coup_temp = cherche_coups_possible(obj_plateau, False)
+                                coup_temp = cherche_coups_possible_plateau(obj_plateau, False)
                                 obj_plateau.joueur_actif = obj_plateau.joueur_blanc
                                 case_verif=True
                                 for elem in coup_temp:
@@ -196,7 +207,7 @@ def cherche_coups_possible(obj_plateau,recursive=True):
                                 else:
                                     coups_possible.append([[x, y], [x-1, y + 1]])
                             #take en passant right
-                            if obj_plateau.pion_double_avance==[x-1,y+1]:
+                            if obj_plateau.pion_double_move==[x-1,y+1]:
                                 coups_possible.append([[x, y], [x - 1, y + 1]])
                         #secure border right
                         if x<=6:
@@ -210,7 +221,7 @@ def cherche_coups_possible(obj_plateau,recursive=True):
                                 else:
                                     coups_possible.append([[x, y], [x+1, y + 1]])
                             #take pawn en passant
-                            if obj_plateau.pion_double_avance==[x+1,y+1]:
+                            if obj_plateau.pion_double_move==[x+1,y+1]:
                                 coups_possible.append([[x, y], [x + 1, y + 1]])
                 if case == 'r':
                     liste_dir = [[0, 1], [1, 0], [-1, 0], [0, -1]]
@@ -282,7 +293,7 @@ def cherche_coups_possible(obj_plateau,recursive=True):
                                 plateau[y][x - 2] == "." and plateau[y][x - 3] == ".":
                             if obj_plateau.joueur_actif.coul == "black":
                                 obj_plateau.joueur_actif = obj_plateau.joueur_blanc
-                                coup_temp = cherche_coups_possible(obj_plateau, False)
+                                coup_temp = cherche_coups_possible_plateau(obj_plateau, False)
                                 obj_plateau.joueur_actif = obj_plateau.joueur_noir
                                 case_verif = True
                                 for elem in coup_temp:
@@ -298,7 +309,7 @@ def cherche_coups_possible(obj_plateau,recursive=True):
                                 plateau[y][x + 2] == ".":
                             if obj_plateau.joueur_actif.coul == "black":
                                 obj_plateau.joueur_actif = obj_plateau.joueur_blanc
-                                coup_temp = cherche_coups_possible(obj_plateau, False)
+                                coup_temp = cherche_coups_possible_plateau(obj_plateau, False)
                                 obj_plateau.joueur_actif = obj_plateau.joueur_noir
                                 case_verif = True
                                 for elem in coup_temp:
@@ -316,10 +327,9 @@ def cherche_coups_possible(obj_plateau,recursive=True):
     if recursive:
         new_coup_possible=[]
         for coup in coups_possible:
-            plateau_temp=Plateau(deepcopy(plateau),ObjetJoueur(obj_plateau.joueur_actif.copy()),obj_plateau.joueur_blanc,obj_plateau.joueur_noir)
-            plateau_temp.pion_double_avance=deepcopy(obj_plateau.pion_double_avance)
+            plateau_temp=ObjetPlateau(obj_plateau.recopy())
             joue_un_coup_plateau(plateau_temp,coup)
-            coups_adverse=cherche_coups_possible(plateau_temp,False)
+            coups_adverse=cherche_coups_possible_plateau(plateau_temp,False)
             echec = False
             for elem in coups_adverse:
                 if obj_plateau.joueur_actif.coul=="white":

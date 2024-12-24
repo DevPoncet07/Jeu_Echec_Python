@@ -16,6 +16,13 @@ def joue_un_coup_plateau(obj_plateau,coup):
     arriver=coup[1]
     plateau=obj_plateau.plateau
 
+    if plateau[arriver[1]][arriver[0]].islower() and obj_plateau.joueur_actif.coul == "white" and plateau[arriver[1]][
+        arriver[0]] != ".":
+        obj_plateau.joueur_noir.piece_perdu.append(plateau[arriver[1]][arriver[0]])
+    if plateau[arriver[1]][arriver[0]].isupper() and obj_plateau.joueur_actif.coul == "black" and plateau[arriver[1]][
+        arriver[0]] != ".":
+        obj_plateau.joueur_blanc.piece_perdu.append(plateau[arriver[1]][arriver[0]])
+
     # if the piece is a white pawn
     if plateau[depart[1]][depart[0]]=="P":
         if len(coup)==3:
@@ -27,7 +34,7 @@ def joue_un_coup_plateau(obj_plateau,coup):
             plateau[depart[1]][depart[0]] = "."
             obj_plateau.pion_double_avance=[depart[0],depart[1]-1]
         # take en passant
-        elif depart[1]-arriver[1]==1 and obj_plateau.pion_double_avance==[arriver[0],arriver[1]]:
+        elif depart[1]-arriver[1]==1 and obj_plateau.pion_double_move==[arriver[0],arriver[1]]:
             plateau[arriver[1]][arriver[0]] = plateau[depart[1]][depart[0]]
             plateau[depart[1]][depart[0]] = "."
             plateau[arriver[1]+1][arriver[0]] = "."
@@ -64,11 +71,11 @@ def joue_un_coup_plateau(obj_plateau,coup):
             plateau[depart[1]][depart[0]] = "."
             obj_plateau.pion_double_avance = [depart[0],depart[1] + 1]
         #if take en passant
-        elif depart[1]-arriver[1]==(-1) and obj_plateau.pion_double_avance==[arriver[0],arriver[1]]:
+        elif depart[1]-arriver[1]==(-1) and obj_plateau.pion_double_move==[arriver[0],arriver[1]]:
             plateau[arriver[1]][arriver[0]] = plateau[depart[1]][depart[0]]
             plateau[depart[1]][depart[0]] = "."
             plateau[arriver[1]-1][arriver[0]] = "."
-            obj_plateau.pion_double_avance = []
+            obj_plateau.pion_double_move = []
         #move normally
         else:
             plateau[arriver[1]][arriver[0]]=plateau[depart[1]][depart[0]]
@@ -100,11 +107,11 @@ def joue_un_coup_plateau(obj_plateau,coup):
             obj_plateau.roc_noir[2] = False
         plateau[arriver[1]][arriver[0]] = plateau[depart[1]][depart[0]]
         plateau[depart[1]][depart[0]] = "."
-        obj_plateau.pion_double_avance = []
+        obj_plateau.pion_double_move = []
 
-    if obj_plateau.joueur_actif.coul == obj_plateau.joueur_blanc.coul:
+    if obj_plateau.joueur_actif.coul == "white":
         obj_plateau.joueur_actif = obj_plateau.joueur_noir
     else:
         obj_plateau.joueur_actif = obj_plateau.joueur_blanc
-
+    obj_plateau.coup_jouer=coup
     return obj_plateau

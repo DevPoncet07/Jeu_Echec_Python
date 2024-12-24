@@ -6,7 +6,7 @@ class CanvasPrincipal(Canvas):
         self.boss=boss
         Canvas.__init__(self,master=boss,width=721,height=721,bg='grey20',borderwidth=0,highlightthickness=0)
         self.boutton_press=False
-        self.bind('<Button-1>',self.onclick)
+        self.bind('<Button-1>',self.click)
 
         self.dico_img_piece= {"r":PhotoImage(file="interface/img/rook_black.png"),
                               "R":PhotoImage(file="interface/img/rook_white.png"),
@@ -25,10 +25,10 @@ class CanvasPrincipal(Canvas):
         self.image_case_focus=PhotoImage(file="interface/img/case_focus.png")
         self.image_case_possible = PhotoImage(file="interface/img/case_possible.png")
 
-    def onclick(self,event):
+    def click(self,event):
         self.boutton_press=True
         x,y=event.x//90,event.y//90
-        self.boss.onclick([x,y])
+        self.boss.click([x,y])
 
     def afficher_fond(self):
         compteur=0
