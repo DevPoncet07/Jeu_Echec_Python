@@ -5,7 +5,6 @@ class ToplevelFinPartie(Toplevel):
     def __init__(self,boss,genre,coul):
         self.boss=boss
         self.genre=genre
-        print(genre,coul)
         Toplevel.__init__(self,master=boss)
         if coul=='white':
             self.coul="Blanc"

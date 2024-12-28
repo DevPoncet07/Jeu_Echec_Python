@@ -32,18 +32,18 @@ def joue_un_coup_plateau(obj_plateau,coup):
         elif depart[1]-arriver[1]==2:
             plateau[arriver[1]][arriver[0]] = plateau[depart[1]][depart[0]]
             plateau[depart[1]][depart[0]] = "."
-            obj_plateau.pion_double_avance=[depart[0],depart[1]-1]
+            obj_plateau.pion_double_move=[depart[0],depart[1]-1]
         # take en passant
         elif depart[1]-arriver[1]==1 and obj_plateau.pion_double_move==[arriver[0],arriver[1]]:
             plateau[arriver[1]][arriver[0]] = plateau[depart[1]][depart[0]]
             plateau[depart[1]][depart[0]] = "."
             plateau[arriver[1]+1][arriver[0]] = "."
-            obj_plateau.pion_double_avance=[]
+            obj_plateau.pion_double_move=[]
         # move normally
         else:
             plateau[arriver[1]][arriver[0]]=plateau[depart[1]][depart[0]]
             plateau[depart[1]][depart[0]] = "."
-            obj_plateau.pion_double_avance = []
+            obj_plateau.pion_double_move = []
     elif plateau[depart[1]][depart[0]]=="K":
         if depart[0]-arriver[0]==2:
             plateau[arriver[1]][arriver[0]] = plateau[depart[1]][depart[0]]
@@ -69,7 +69,7 @@ def joue_un_coup_plateau(obj_plateau,coup):
         elif depart[1] - arriver[1] == (-2):
             plateau[arriver[1]][arriver[0]] = plateau[depart[1]][depart[0]]
             plateau[depart[1]][depart[0]] = "."
-            obj_plateau.pion_double_avance = [depart[0],depart[1] + 1]
+            obj_plateau.pion_double_move = [depart[0],depart[1] + 1]
         #if take en passant
         elif depart[1]-arriver[1]==(-1) and obj_plateau.pion_double_move==[arriver[0],arriver[1]]:
             plateau[arriver[1]][arriver[0]] = plateau[depart[1]][depart[0]]
@@ -80,7 +80,7 @@ def joue_un_coup_plateau(obj_plateau,coup):
         else:
             plateau[arriver[1]][arriver[0]]=plateau[depart[1]][depart[0]]
             plateau[depart[1]][depart[0]] = "."
-            obj_plateau.pion_double_avance = []
+            obj_plateau.pion_double_move = []
 
     elif plateau[depart[1]][depart[0]]=="k":
         if depart[0]-arriver[0]==2:

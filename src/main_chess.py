@@ -1,4 +1,5 @@
 from copy import deepcopy
+import re
 
 from src.objet_partie_chess import PartieChess
 from src.objet_joueur import ObjetJoueur
@@ -20,12 +21,33 @@ class MoteurEchec:
                               ["R","N","B","Q","K","B","N","R"])
 
         self.partie_en_cours=None
+        self.liste_colone = [8,7,6,5,4,3,2,1]
+        self.liste_ligne = ["a", "b", "c", "d", "e", "f", "g", "h"]
 
     def decode_commande(self,commande):
         if commande[0]=='new':
             self.cree_nouvelle_partie(commande[1],commande[2])
-        if commande[0]=="joue":
+        elif commande[0]=="joue":
             self.joue_un_coup(commande[1])
+        else:
+            commande="".join(commande)
+
+            if re.search("[a-h][1-8][a-h][1-8]",commande):
+                self.decode_coup_simple(commande)
+            elif re.search("[a-h][1-8]",commande):
+                self.decode_coup(commande)
+
+    def decode_coup(self,text):
+        print(text)
+
+    def decode_coup_simple(self,text):
+        coup=[[self.liste_ligne.index(text[0]),
+               self.liste_colone.index(int(text[1]))],
+              [self.liste_ligne.index(text[2]),
+                self.liste_colone.index(int(text[3]))
+                ]]
+        print(coup)
+        self.joue_un_coup(coup)
 
     def cree_nouvelle_partie(self,joueur_blanc="joueur",joueur_noir="joueur"):
         joueur_blanc=ObjetJoueur(['white',joueur_blanc,[]])

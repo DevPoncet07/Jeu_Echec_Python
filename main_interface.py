@@ -37,14 +37,19 @@ class MainInterface(Tk):
         if self.case_active == coord:
             self.case_active=[-1,-1]
             self.case_possible_piece=[]
+
             self.can.afficher_case_active(self.case_active, self.case_possible_piece)
             self.can.afficher_pieces(self.chess.partie_en_cours.objetplateau.plateau)
+
         elif self.chess.demande_coup([self.case_active,coord]):
             self.joue_un_coup([self.case_active,coord])
+
         elif self.chess.demande_case_focus(coord):
             self.case_active = coord
+
             self.case_possible_piece=self.chess.return_case_arriver(coord)
             self.can.afficher_case_active(self.case_active,self.case_possible_piece)
+            self.can.prepare_motion(coord)
             self.can.afficher_pieces(self.chess.partie_en_cours.objetplateau.plateau)
         else:
             self.case_active = [-1, -1]
@@ -83,11 +88,15 @@ class MainInterface(Tk):
             self.can.afficher_pieces(self.chess.return_plateau_actuel())
             self.print("Nouvelle partie :\n    - joueur blanc =  "+self.chess.partie_en_cours.joueur_blanc.genre+
                        "\n    - joueur noir =  "+self.chess.partie_en_cours.joueur_noir.genre,"\ninterface : ")
-        if commande[0]=='joue':
-            if commande[1] is not None:
-                    self.print("coup jouer : " + str(commande[1]), "")
-        if commande[0]=='clear':
+        elif commande[0]=='clear':
             self.frame.clear_console()
+        else:
+            self.case_active = [-1, -1]
+            self.case_possible_piece = []
+            self.can.afficher_case_active(self.case_active, self.case_possible_piece)
+            self.can.afficher_pieces(self.chess.partie_en_cours.objetplateau.plateau)
+            self.print("coup jouer bot : " + str(self.chess.partie_en_cours.objetplateau.coup_jouer), "")
+
 
     def print(self, text, infos):
         self.frame.print(text,infos)
