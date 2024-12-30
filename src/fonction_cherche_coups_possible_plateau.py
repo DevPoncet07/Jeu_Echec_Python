@@ -1,6 +1,5 @@
 
 from src.fonction_joue_un_coup_plateau import joue_un_coup_plateau
-from src.objet_plateau import ObjetPlateau
 """
 #################################################################################
 #   Function  very important                                                    #
@@ -327,7 +326,7 @@ def cherche_coups_possible_plateau(obj_plateau,recursive=True):
     if recursive:
         new_coup_possible=[]
         for coup in coups_possible:
-            plateau_temp=ObjetPlateau(obj_plateau.recopy())
+            plateau_temp=obj_plateau.recopy()
             joue_un_coup_plateau(plateau_temp,coup)
             coups_adverse=cherche_coups_possible_plateau(plateau_temp,False)
             echec = False

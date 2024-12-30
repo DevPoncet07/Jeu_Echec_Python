@@ -1,3 +1,9 @@
+"""
+ObjetPlateau contient l etat complet d un coup de PartieChess
+    et peut renvoier une copie des toute ces infos
+
+"""
+
 from copy import deepcopy
 
 from src.objet_joueur import ObjetJoueur
@@ -15,9 +21,10 @@ class ObjetPlateau:
         self.coups_possible=arg[8]
         self.coups_adverse=arg[9]
         self.coup_jouer=arg[10]
+        self.score_position=arg[11]
 
     def recopy(self):
-        return [self.partie,
+        return ObjetPlateau([self.partie,
                 deepcopy(self.plateau),
                 self.pion_double_move,
                 ObjetJoueur(self.joueur_actif.recopy()),
@@ -27,4 +34,5 @@ class ObjetPlateau:
                 deepcopy(self.roc_noir),
                 self.coups_possible,
                 self.coups_adverse,
-                self.coup_jouer]
+                self.coup_jouer,
+                self.score_position])

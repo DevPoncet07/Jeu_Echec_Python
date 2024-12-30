@@ -1,10 +1,13 @@
-
+"""
+PartieChess stock les donnee d une partie , les joueurs ,les differents coups jouer
+"""
 from copy import deepcopy
 
 from src.objet_plateau import ObjetPlateau
 from src.fonction_cherche_coups_possible_plateau import cherche_coups_possible_plateau
 from src.fonction_cherche_coups_possible_plateau import cherche_coups_possible_adverse_plateau
 from src.fonction_joue_un_coup_plateau import joue_un_coup_plateau
+from src.fonction_analyse_score_position import analyse_score_position
 
 
 
@@ -25,7 +28,8 @@ class PartieChess:
                                         [True,True,True],
                                         [],
                                         [],
-                                        []])
+                                        [],
+                                        0])
         self.historique_plateau=[]
         self.historique_plateau.append(self.objetplateau)
         self.objetplateau.coups_possible=cherche_coups_possible_plateau(self.objetplateau,True)
@@ -35,11 +39,13 @@ class PartieChess:
         if not self.fin_de_partie:
             if self.objetplateau.joueur_actif.genre != 'joueur':
                 coup = self.objetplateau.joueur_actif.joue_un_coup(self.objetplateau)
-            self.objetplateau=ObjetPlateau(self.objetplateau.recopy())
+            self.objetplateau=self.objetplateau.recopy()
             self.objetplateau=joue_un_coup_plateau(self.objetplateau,coup)
             self.historique_plateau.append(self.objetplateau)
             self.objetplateau.coups_possible = cherche_coups_possible_plateau(self.objetplateau, True)
             self.objetplateau.coups_adverse = cherche_coups_possible_adverse_plateau(self.objetplateau)
+            self.objetplateau.score_position=analyse_score_position(self.objetplateau)
+            print("score :",self.objetplateau.score_position)
             if not self.objetplateau.coups_possible and self.cherche_echec(self.objetplateau):
                 self.fin_de_partie = "Echec et mat , perdu pour le joueur : "
             elif not self.objetplateau.coups_possible :

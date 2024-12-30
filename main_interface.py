@@ -34,7 +34,7 @@ class MainInterface(Tk):
 
 
     def click(self,coord):
-        if self.case_active == coord:
+        if self.case_active == coord and self.can.boutton_press:
             self.case_active=[-1,-1]
             self.case_possible_piece=[]
 

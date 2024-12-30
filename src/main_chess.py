@@ -1,3 +1,8 @@
+"""
+point d entree du module MoteurEchec:  paramatre: boss=interface
+
+"""
+
 from copy import deepcopy
 import re
 
