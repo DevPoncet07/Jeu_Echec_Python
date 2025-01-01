@@ -27,14 +27,12 @@ def analyse_score_position(objet_plateau):
         for coup in objet_plateau.coups_adverse:
             if objet_plateau.plateau[coup[1][1]][coup[1][0]]=="K":
                 score-=100
-                print(objet_plateau.coups_possible)
                 if len(objet_plateau.coups_possible)==0:
                     score-=1000
     else:
         for coup in objet_plateau.coups_adverse:
             if objet_plateau.plateau[coup[1][1]][coup[1][0]]=="k":
                 score+=100
-                print(objet_plateau.coups_possible)
                 if len(objet_plateau.coups_possible)==0:
                     score+=1000
     return score

@@ -34,28 +34,29 @@ class MainInterface(Tk):
 
 
     def click(self,coord):
-        if self.case_active == coord and self.can.boutton_press:
-            self.case_active=[-1,-1]
-            self.case_possible_piece=[]
+        if not self.chess.partie_en_cours.fin_de_partie:
+            if self.case_active == coord and self.can.boutton_press:
+                self.case_active=[-1,-1]
+                self.case_possible_piece=[]
 
-            self.can.afficher_case_active(self.case_active, self.case_possible_piece)
-            self.can.afficher_pieces(self.chess.partie_en_cours.objetplateau.plateau)
+                self.can.afficher_case_active(self.case_active, self.case_possible_piece)
+                self.can.afficher_pieces(self.chess.partie_en_cours.objetplateau.plateau)
 
-        elif self.chess.demande_coup([self.case_active,coord]):
-            self.joue_un_coup([self.case_active,coord])
 
-        elif self.chess.demande_case_focus(coord):
-            self.case_active = coord
 
-            self.case_possible_piece=self.chess.return_case_arriver(coord)
-            self.can.afficher_case_active(self.case_active,self.case_possible_piece)
-            self.can.prepare_motion(coord)
-            self.can.afficher_pieces(self.chess.partie_en_cours.objetplateau.plateau)
-        else:
-            self.case_active = [-1, -1]
-            self.case_possible_piece = []
-            self.can.afficher_case_active(self.case_active, self.case_possible_piece)
-            self.can.afficher_pieces(self.chess.partie_en_cours.objetplateau.plateau)
+            elif self.chess.demande_case_focus(coord)and self.can.boutton_press:
+                self.case_active = coord
+                self.case_possible_piece=self.chess.return_case_arriver(coord)
+                self.can.afficher_case_active(self.case_active,self.case_possible_piece)
+                self.can.prepare_motion(coord)
+                self.can.afficher_pieces(self.chess.partie_en_cours.objetplateau.plateau)
+            elif self.chess.demande_coup([self.case_active, coord]):
+                self.joue_un_coup([self.case_active, coord])
+            else:
+                self.case_active = [-1, -1]
+                self.case_possible_piece = []
+                self.can.afficher_case_active(self.case_active, self.case_possible_piece)
+                self.can.afficher_pieces(self.chess.partie_en_cours.objetplateau.plateau)
 
     def nouvelle_partie(self,joueur_blanc,joueur_noir):
         self.envoie_commande_chess(['new',joueur_blanc,joueur_noir])
@@ -106,17 +107,13 @@ class MainInterface(Tk):
             self.fenetre_promotion=ToplevelPromotion(self,self.chess.partie_en_cours.objetplateau.joueur_actif.coul,coup)
         elif self.chess.partie_en_cours.objetplateau.joueur_actif.genre=="joueur":
             self.envoie_commande_chess(["joue", coup])
+            if self.chess.partie_en_cours.historique_plateau[-1].joueur_actif.genre != "joueur":
+                self.envoie_commande_chess(["joue", None])
+                self.print("coup jouer bot : " + str(self.chess.partie_en_cours.objetplateau.coup_jouer), "")
             self.case_active = [-1, -1]
             self.case_possible_piece = []
             self.can.afficher_case_active(self.case_active, self.case_possible_piece)
             self.can.afficher_pieces(self.chess.partie_en_cours.objetplateau.plateau)
-            if self.chess.partie_en_cours.historique_plateau[-1].joueur_actif.genre != "joueur":
-                self.envoie_commande_chess(["joue", None])
-                self.case_active = [-1, -1]
-                self.case_possible_piece = []
-                self.can.afficher_case_active(self.case_active, self.case_possible_piece)
-                self.can.afficher_pieces(self.chess.partie_en_cours.objetplateau.plateau)
-                self.print("coup jouer bot : " + str(self.chess.partie_en_cours.objetplateau.coup_jouer), "")
 
         if self.chess.partie_en_cours.fin_de_partie:
             ToplevelFinPartie(self,self.chess.partie_en_cours.fin_de_partie,self.chess.partie_en_cours.objetplateau.joueur_actif.coul)
