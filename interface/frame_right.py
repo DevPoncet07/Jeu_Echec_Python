@@ -1,7 +1,7 @@
-from tkinter import Frame, Button, ttk, StringVar, Label
+from tkinter import Frame
 from interface.frame_info_top import FrameInfoTop
 from interface.frame_outils import FrameOutils
-from interface.text_principale import TextPrincipale
+from interface.frame_coup_jouer import FrameCoupJouer
 
 
 class FrameRight(Frame):
@@ -15,17 +15,12 @@ class FrameRight(Frame):
         self.frame_outils=FrameOutils(self)
         self.frame_outils.grid(row=1,column=0,pady=10)
 
-        self.text=TextPrincipale(self)
-        self.text.grid(row=2,column=0,padx=10)
-
-    def print(self, text, infos):
-        self.text.print(text,infos)
-
-    def envoie_commande_chess(self, commande):
-        self.boss.envoie_commande_chess(commande)
+        self.frame_coup_jouer=FrameCoupJouer(self)
+        self.frame_coup_jouer.grid(row=2,column=0)
 
     def nouvelle_partie(self,joueur_blanc,joueur_noir):
         self.boss.nouvelle_partie(joueur_blanc,joueur_noir)
+        self.frame_coup_jouer.nouvelle_partie()
 
-    def clear_console(self):
-        self.text.clear_console()
+    def selectionne_plateau(self,index):
+        self.boss.selectionne_plateau(index)

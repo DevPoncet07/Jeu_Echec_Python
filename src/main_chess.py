@@ -69,7 +69,7 @@ class MoteurEchec:
     def joue_un_coup(self,coup):
         if not self.partie_en_cours.fin_de_partie:
             if self.partie_en_cours.objetplateau.joueur_actif.genre != 'joueur':
-                coup = self.partie_en_cours.objetplateau.joueur_actif.joue_un_coup(self.partie_en_cours.objetplateau)
+                coup = self.partie_en_cours.objetplateau.joueur_actif.trouve_un_coup(self.partie_en_cours)
             self.partie_en_cours.objetplateau = self.partie_en_cours.objetplateau.recopy()
             self.partie_en_cours.objetplateau = joue_un_coup_plateau(self.partie_en_cours.objetplateau, coup)
             self.partie_en_cours.historique_plateau.append(self.partie_en_cours.objetplateau)

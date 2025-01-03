@@ -60,7 +60,7 @@ def cherche_coups_possible_plateau(obj_plateau,recursive=True):
                                 else:
                                     coups_possible.append([[x, y], [x-1, y - 1]])
                             # take en passant left
-                            if obj_plateau.pion_double_move==[x-1,y-1] and plateau[y-1][x-1].islower():
+                            if obj_plateau.pion_double_move==[x-1,y-1] and plateau[y][x-1]=='p':
                                 coups_possible.append([[x, y], [x - 1, y - 1]])
                         #secure pawn border right
                         if x<=6:
@@ -74,7 +74,7 @@ def cherche_coups_possible_plateau(obj_plateau,recursive=True):
                                 else:
                                     coups_possible.append([[x, y], [x+1, y - 1]])
                             #take pawn en passant
-                            if obj_plateau.pion_double_move==[x+1,y-1] and plateau[y-1][x+1].islower():
+                            if obj_plateau.pion_double_move==[x+1,y-1] and plateau[y][x+1]=='p':
                                 coups_possible.append([[x, y], [x + 1, y - 1]])
                 #if white rook
                 if case == 'R':
@@ -206,7 +206,7 @@ def cherche_coups_possible_plateau(obj_plateau,recursive=True):
                                 else:
                                     coups_possible.append([[x, y], [x-1, y + 1]])
                             #take en passant right
-                            if obj_plateau.pion_double_move==[x-1,y+1] and plateau[y+1][x-1].isupper():
+                            if obj_plateau.pion_double_move==[x-1,y+1] and plateau[y][x-1]=='P':
                                 coups_possible.append([[x, y], [x - 1, y + 1]])
                         #secure border right
                         if x<=6:
@@ -220,7 +220,7 @@ def cherche_coups_possible_plateau(obj_plateau,recursive=True):
                                 else:
                                     coups_possible.append([[x, y], [x+1, y + 1]])
                             #take pawn en passant
-                            if obj_plateau.pion_double_move==[x+1,y+1] and plateau[y+1][x+1].isupper():
+                            if obj_plateau.pion_double_move==[x+1,y+1] and plateau[y][x+1]=='P':
                                 coups_possible.append([[x, y], [x + 1, y + 1]])
                 if case == 'r':
                     liste_dir = [[0, 1], [1, 0], [-1, 0], [0, -1]]
