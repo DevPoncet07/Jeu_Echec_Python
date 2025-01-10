@@ -2,7 +2,6 @@ from copy import deepcopy
 
 from src.algo_recherche_coup.Objet_AlgorithmeAleatoire import AlgorithmeAleatoire
 from src.algo_recherche_coup.Objet_AlgorithmeMinMax import AlgorithmeMinMax
-from src.algo_recherche_coup.Objet_AlgorithmeMinMax2 import AlgorithmeMinMax2
 from src.algo_recherche_coup.objet_Algorithme_stockfish import AlgorithmeStockfish
 
 
@@ -24,9 +23,6 @@ class ObjetJoueur:
             return algo.trouve_un_coup(obj_plateau.coups_possible)
         if self.genre=="minmax":
             algo=AlgorithmeMinMax(self)
-            return algo.trouve_un_coup(obj_plateau,profondeur)
-        if self.genre=="minmax2":
-            algo=AlgorithmeMinMax2(self)
             return algo.trouve_un_coup(obj_plateau,profondeur)
         if self.genre=="stockfish":
             return self.algo.trouve_un_coup(obj_parti)

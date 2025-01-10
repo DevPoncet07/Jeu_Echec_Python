@@ -1,6 +1,6 @@
 """
 ObjetPlateau contient l etat complet d un coup de PartieChess
-    et peut renvoier une copie des toute ces infos
+    et peut renvoier une copie de toutes ces infos
 
 """
 

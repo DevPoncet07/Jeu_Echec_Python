@@ -5,7 +5,6 @@ from  tkinter import Canvas,PhotoImage,font
 class CanvasPrincipal(Canvas):
     def __init__(self,boss):
 
-
         self.boss=boss
         Canvas.__init__(self,master=boss,width=721,height=721,bg='grey20',borderwidth=0,highlightthickness=0)
         self.boutton_press=False
@@ -31,6 +30,9 @@ class CanvasPrincipal(Canvas):
         self.coord_piece_depart = None
         self.plateau = None
         self.img_piece_motion = None
+        self.case_active = None
+        self.boutton_press = None
+        self.var_motion = False
         self.liste_image_piece=[]
         self.liste_image_case=[]
         self.liste_image_case_focus=[]
@@ -41,30 +43,37 @@ class CanvasPrincipal(Canvas):
 
     def click(self,event):
         self.boutton_press=True
-        x,y=event.x//90,event.y//90
-        self.boss.click([x,y])
+        x, y = event.x // 90, event.y // 90
+        self.boss.click([x, y])
+
+
 
     def declick(self,event):
         self.boutton_press = False
         x, y = event.x // 90, event.y // 90
-        self.stop_motion()
-        self.boss.click([x, y])
+        self.boss.declick([x, y])
 
     def prepare_motion(self,coord):
         x=coord[0]
         y=coord[1]
+        self.var_motion=True
         self.coord_piece_depart = [x, y]
         self.img_piece_motion = self.create_image(x * 90, y * 90, image=self.dico_img_piece[self.plateau[y][x]],
                                                   anchor='nw')
     def stop_motion(self):
         self.coord_piece_depart = [-1,-1]
         self.delete(self.img_piece_motion)
+        self.var_motion = False
 
     def motion(self,event):
         if self.boutton_press:
             x,y,=event.x,event.y
             self.tag_raise(self.img_piece_motion)
             self.coords(self.img_piece_motion,[x-45,y-45])
+    def motion_manuel(self,x,y):
+        self.tag_raise(self.img_piece_motion)
+        print("mpotion",x,y)
+        self.coords(self.img_piece_motion,[x*90,y*90])
 
     def afficher_fond(self):
         global coul_font

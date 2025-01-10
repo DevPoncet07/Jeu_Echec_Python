@@ -16,8 +16,7 @@ class AlgorithmeStockfish:
 class ThreadStockfish(Thread):
     def __init__(self,objet_parti):
         Thread.__init__(self)
-        self.stockfish = Stockfish(
-        path="C:/Users/la famille/Documents/Projet_git/Repository_Chess_Python/src/stockfish/stockfish-windows-x86-64-avx2",parameters={"UCI_Elo":2500})
+        self.stockfish = Stockfish(path="C:/Users/la famille/Documents/Projet_git/Repository_Chess_Python/src/stockfish/stockfish-windows-x86-64-avx2",parameters={"UCI_Elo":3000})
         self._return=None
         self.objet_parti=objet_parti
         self.liste_colone = ["8","7", "6", "5", "4", "3", "2", "1"]
@@ -36,9 +35,18 @@ class ThreadStockfish(Thread):
         return self._return
 
     def traduis_coup(self,coup):
-        new_coup=self.liste_ligne[coup[0][0]]+self.liste_colone[coup[0][1]]+self.liste_ligne[coup[1][0]]+self.liste_colone[coup[1][1]]
+        if len(coup)==3:
+            new_coup=self.liste_ligne[coup[0][0]]+self.liste_colone[coup[0][1]]+self.liste_ligne[coup[1][0]]+self.liste_colone[coup[1][1]]+coup[2]
+
+        else:
+            new_coup=self.liste_ligne[coup[0][0]]+self.liste_colone[coup[0][1]]+self.liste_ligne[coup[1][0]]+self.liste_colone[coup[1][1]]
         return new_coup
 
     def retraduis_coup(self,coup):
-        new_coup=[[self.liste_ligne.index(coup[0]),self.liste_colone.index(coup[1])],[self.liste_ligne.index(coup[2]),self.liste_colone.index(coup[3])]]
+        if len(coup)==5:
+            new_coup = [[self.liste_ligne.index(coup[0]), self.liste_colone.index(coup[1])],
+                        [self.liste_ligne.index(coup[2]), self.liste_colone.index(coup[3])],coup[4]]
+        else:
+            new_coup=[[self.liste_ligne.index(coup[0]),self.liste_colone.index(coup[1])],[self.liste_ligne.index(coup[2]),self.liste_colone.index(coup[3])]]
+        print(coup,new_coup)
         return new_coup

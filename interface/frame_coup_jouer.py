@@ -1,4 +1,4 @@
-from tkinter import Frame,Canvas,font
+from tkinter import Frame,Canvas,font,Scrollbar
 
 
 
@@ -6,9 +6,12 @@ class FrameCoupJouer(Frame):
     def __init__(self,boss):
         self.boss=boss
         Frame.__init__(self,master=boss)
-        self.can=Canvas(self,width=200,height=300,bg='grey30')
+        self.can=Canvas(self,width=200,height=300,bg='grey30',scrollregion=(0,0,200,300))
         self.can.grid(row=0,column=0)
         self.can.bind("<Button-1>",self.click_coup)
+        self.scrolly=Scrollbar(self,orient='vertical',command=self.can.yview)
+        self.scrolly.grid(row=0,column=1,sticky='ns')
+        self.can.config(yscrollcommand=self.scrolly.set)
         self.liste_coup=[]
         self.liste_image_can=[]
         self.liste_colone=['a','b','c','d','e','f','g','h']
@@ -17,9 +20,11 @@ class FrameCoupJouer(Frame):
     def nouvelle_partie(self):
         self.liste_coup = []
         self.liste_image_can = []
-        self.can = Canvas(self, width=200, height=300, bg='grey30')
+        self.can = Canvas(self, width=200, height=300, bg='grey30',scrollregion=self.can.bbox("ALL"))
         self.can.grid(row=0, column=0)
         self.can.bind("<Button-1>", self.click_coup)
+        self.can.config(yscrollcommand=self.scrolly.set)
+        self.scrolly.configure(command=self.can.yview)
 
     def ajoute_coup(self,objet_plateau,coup):
         new_coup=""
@@ -70,6 +75,9 @@ class FrameCoupJouer(Frame):
 
     def mise_a_jour_canvas(self):
         index=len(self.liste_coup)
+        print("index ====",index)
+        if index>=24:
+            self.can.configure(scrollregion=(0,0,200,20+index*10))
         if len(self.liste_coup)%2==1:
             x=10
             y=10 +( (index - 1) // 2)*20
@@ -77,11 +85,11 @@ class FrameCoupJouer(Frame):
             x = 90
             y = 10 +( (index - 1) // 2)*20
         self.liste_image_can.append(self.can.create_text(x,y,anchor="nw",fill='white',text=self.liste_coup[index-1],font=font.Font(size=12,family='Arial')))
+        if index%2==1:
+            self.can.yview_moveto(20)
 
     def click_coup(self,event):
 
         current=event.widget.find_withtag('current')
-        print(current
-              )
         if current:
             self.boss.selectionne_plateau(current[0])
