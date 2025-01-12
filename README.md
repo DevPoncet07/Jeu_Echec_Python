@@ -12,10 +12,19 @@ Vous pouvez lancer une partie :
 * humain vs bot  stockfish
 * bot vs bot
 
-Vous pouvez jouer les pieces blanches comme pieces les noirs.<br>
-vous pouvez selectionner une piece en cliquand dessus puis cliquer sur la case d'arriver.<br>
-vous pouvez aussi jouer un coup en drag and drop.<br>
-vous pouvez retourner l'echequier à tout moment.<br>
-vous pouvez cliquer sur les coups jouer pour les revoirs.
+Vous pouvez jouer les pieces blanches comme les pieces noirs.<br>
+Vous pouvez selectionner une piece en cliquand dessus puis cliquer sur la case d'arriver. <br>
+Vous pouvez aussi jouer un coup en drag and drop.<br>
+Vous pouvez retourner l'echequier à tout moment.<br>
+Vous pouvez cliquer sur les coups jouer pour les revoirs.<br>
+Le moteur gere tous les coups possibles tel que le roc, la prise en passant ou la promotion.
 
-![screen_shoot_base.png](src_reposity/screen_shoot_info.png)
+![screen_shoot_info.png](src_reposity/screen_shoot_info.png)
+
+# Installation
+1. Vous devrez Télécharger stockfish ici https://stockfishchess.org/download/
+ <br><br>
+2. Puis place le fichier téléchargé dans le dossier "src".
+<br><br>
+3. Puis installer le module python stockfish sur votre ordinateur. Avec la commande : "pip install stockfish"
+Disponible ici https://pypi.org/project/stockfish/
