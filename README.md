@@ -28,3 +28,7 @@ Le moteur gere tous les coups possibles tel que le roc, la prise en passant ou l
 <br><br>
 3. Puis installer le module python stockfish sur votre ordinateur. Avec la commande : "pip install stockfish"
 Disponible ici https://pypi.org/project/stockfish/
+
+# Site web
+
+http://devponcet07.alwaysdata.net/echec_python.html
