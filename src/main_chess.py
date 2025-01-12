@@ -90,32 +90,23 @@ class MoteurEchec:
         return self.partie_en_cours.objetplateau.plateau
 
     def demande_case_focus(self,case):
-        return self.teste_case_depart_dans_case_possible(self.partie_en_cours.objetplateau,case)
+        for coup in self.partie_en_cours.objetplateau.coups_possible:
+            if coup[0] == case:
+                return True
+        return False
 
     def return_case_arriver(self,case):
-        return self.return_case_arriver_de_case_depart(self.partie_en_cours.objetplateau,case)
-
-    def demande_coup(self, coup):
-        return self.teste_coup_in_coup_possible(self.partie_en_cours.objetplateau,coup)
-
-    def teste_case_depart_dans_case_possible(self,obj_plateau,case):
-        for coup in obj_plateau.coups_possible:
-            if coup[0]==case:
-                return True
-        return False
-
-    def teste_coup_in_coup_possible(self,obj_plateau,coup):
-        for elem in obj_plateau.coups_possible:
-            if elem[0:2]==coup:
-                return True
-        return False
-
-    def return_case_arriver_de_case_depart(self,obj_plateau,case):
         cases = []
-        for coup in obj_plateau.coups_possible:
+        for coup in self.partie_en_cours.objetplateau.coups_possible:
             if coup[0] == case:
                 cases.append(coup[1])
         return cases
+
+    def demande_coup(self, coup):
+        for elem in self.partie_en_cours.objetplateau.coups_possible:
+            if elem[0:2] == coup:
+                return True
+        return False
 
     def demande_promotion(self,coup):
         if self.partie_en_cours.objetplateau.joueur_actif.coul=='white':

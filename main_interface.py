@@ -38,7 +38,9 @@ class MainInterface(Tk):
 
     def click(self,coord):
         if not self.chess.partie_en_cours.fin_de_partie:
-            if self.case_active == coord :
+            if self.case_active == coord and self.can.var_motion:
+                pass
+            elif self.case_active == coord:
                 self.case_active=[-1,-1]
                 self.case_possible_piece=[]
                 self.can.afficher_case_active(self.case_active, self.case_possible_piece)
@@ -46,20 +48,23 @@ class MainInterface(Tk):
             elif self.chess.demande_case_focus(coord):
                 self.case_active = coord
                 self.case_possible_piece=self.chess.return_case_arriver(coord)
-                self.can.prepare_motion(coord)
-                self.can.motion_manuel(coord[0], coord[1])
                 self.can.afficher_case_active(self.case_active,self.case_possible_piece)
                 self.can.afficher_pieces(self.chess.partie_en_cours.objetplateau.plateau)
+
             elif self.chess.demande_coup([self.case_active, coord]):
                 self.joue_un_coup([self.case_active, coord])
+                self.can.stop_motion()
             else:
                 self.case_active = [-1, -1]
                 self.case_possible_piece = []
+                self.can.stop_motion()
                 self.can.afficher_case_active(self.case_active, self.case_possible_piece)
                 self.can.afficher_pieces(self.chess.partie_en_cours.objetplateau.plateau)
 
 
+
     def declick(self,coord):
+
         if self.chess.demande_coup([self.case_active, coord]):
             self.joue_un_coup([self.case_active, coord])
             self.can.stop_motion()
